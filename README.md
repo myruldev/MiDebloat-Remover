@@ -46,7 +46,8 @@ Made with ❤️ by **myrul.dev**
 2.  **Shizuku**  
     👉 [Shizuku di Play Store](https://play.google.com/store/apps/details?id=moe.shizuku.privileged.api)
 3.  **Shizuku dalam keadaan RUNNING**
-4.  **rish (Shizuku shell) sudah terpasang** (Tes dengan perintah `rish -c id` harus berhasil).
+4.  **rish (Shizuku shell) sudah terpasang** (Tes dengan perintah `rish -c id` harus berhasil).  
+    👉 *Bagi yang bingung atau mengalami error saat pemasangan `rish`, lihat **[Panduan Lengkap Setup Rish & Troubleshooting](docs/troubleshooting.md)**.*
 
 ---
 
