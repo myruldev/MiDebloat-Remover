@@ -70,8 +70,19 @@ Made with ❤️ by **myrul.dev**
 4.  **Optimasi Animasi**: Mempercepat transisi Android Anda secara instan ke `0.5x` (membuat UI terasa sangat cepat) atau mengembalikannya ke `1.0x` (standar).
 5.  **Restore Debloat**: Mengaktifkan kembali seluruh paket yang dinonaktifkan ke kondisi semula.
 
-
 ---
+
+## 💡 Rekomendasi Urutan Penggunaan (Khusus HyperOS & Redmi Note 13 Series)
+Untuk mendapatkan performa maksimal, baterai lebih awet, dan UI yang sangat responsif, jalankan menu dengan urutan berikut:
+
+1.  **Pilih Menu `1` (Debloat AMAN)**: Membersihkan HP dari segala bentuk iklan sistem (MSA), telemetri pelacak (Analytics), Wallpaper Carousel (bikin boros kuota/baterai), serta bug report tanpa efek samping.
+2.  **Pilih Menu `10` (Speed Up Animations - 0.5x)**: Sangat direkomendasikan untuk layar 120Hz agar transisi buka-tutup aplikasi terasa **2x lipat lebih responsif & instan**.
+3.  **Pilih Menu `4` (Clean)**: Membersihkan cache sistem secara berkala dan menutup background apps yang tidak penting.
+4.  *(Opsional)* **Pilih Menu `2` (Debloat AMAN + Optional)**: Jalankan ini jika Anda sama sekali tidak menggunakan aplikasi bawaan Xiaomi (seperti GetApps, Mi Video, Mi Music, Mi Cloud, dsb.) dan lebih memilih aplikasi alternatif dari Google/pihak ketiga.
+
+> [!WARNING]
+> **Hindari Menu `3` (Advanced)** kecuali benar-benar diperlukan untuk gaming berat. Mematikan Joyose di beberapa versi HyperOS dapat mengunci refresh rate layar di aplikasi tertentu.
+
 
 ## 🛡️ Keamanan & Disclaimer
 *   Script ini **tidak menghapus file sistem secara permanen**, melainkan menonaktifkannya (`disable-user`) untuk user 0.
