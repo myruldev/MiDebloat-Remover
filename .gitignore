@@ -1,0 +1,24 @@
+# ===== MiDebloat-Remover - .gitignore =====
+
+# Backup & logs
+logs/
+backup/
+*.log
+
+# System / editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Archives
+*.zip
+*.tar.gz
+
+# Temp files
+tmp/
+*.tmp
+*.bak

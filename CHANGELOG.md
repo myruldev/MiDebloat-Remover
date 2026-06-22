@@ -7,6 +7,23 @@ and this project adheres to Semantic Versioning.
 
 ---
 
+## [3.0.0] - 2026-06-22
+### Added
+- ASCII banner baru bergaya "ANSI Shadow" (box-drawing) bertuliskan **MDR**, seragam dengan Android Universal Debloat (AUD).
+- **Scan & Status Paket** — menampilkan status setiap paket target (`AKTIF` / `OFF` / tidak ada) sebelum debloat.
+- **Backup otomatis** daftar paket aktif ke `backup/backup-YYYYMMDD-HHMMSS.txt` sebelum proses disable.
+- **Log aksi** ke `logs/actions.log` + menu **Lihat Log Aksi**.
+- **Restore dari File Backup** — pulihkan paket dari file backup yang dipilih.
+- **Whitelist sistem** — paket vital (SystemUI, Settings, GMS/GSF, SecurityCenter, Launcher, Phone, dsb.) dilindungi & tidak akan dinonaktifkan.
+- Daftar bloatware diperluas: MSA core, Glance/Fashion Gallery, App Vault (newhome), Facebook (katana), Mi Browser global, Mi Video global, FM Radio HyperOS, Theme Store, Mi Community/VIP, Virtual SIM, PowerKeeper, dll.
+- Tabel panduan menu di README + badge merek Xiaomi/Redmi/POCO.
+
+### Changed
+- Identitas diperbarui: website **www.myrul.dev** & Facebook **https://web.facebook.com/myruldev** (seragam dengan AUD).
+- Menu utama ditata ulang (Scan di urutan 1) dan diperluas menjadi 15 opsi.
+
+---
+
 ## [2.0.0] - 2026-06-17
 ### Added
 - Rebranded project from `rn7-1klik` to `MiDebloat-Remover` for universal Xiaomi series support.

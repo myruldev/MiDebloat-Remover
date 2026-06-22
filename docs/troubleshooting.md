@@ -80,7 +80,7 @@ echo 'export RISH_APPLICATION_ID=com.termux' >> ~/.bashrc
 
 ## ⚠️ Features missing after debloat
 **Fix**
-- Use menu: Restore (Option 10)
+- Use menu: Restore Debloat (Option 13) atau Restore dari File Backup (Option 14)
 - Or enable manually:
 ```bash
 rish -c "pm enable <package_name>"
