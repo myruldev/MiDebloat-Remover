@@ -81,6 +81,11 @@ log() {
 }
 
 check_update() {
+  # Cek apakah git terpasang
+  if ! command -v git >/dev/null 2>&1; then
+    return 0
+  fi
+
   # Cek apakah folder ini git repo
   if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     return 0
@@ -111,13 +116,19 @@ check_update() {
     read -r -p "Update otomatis sekarang? (y/n): " confirm
     if [[ "$confirm" =~ ^[Yy]$ ]]; then
       echo "Mengunduh pembaruan..."
-      if git pull origin "$current_branch" >/dev/null 2>&1 || git pull >/dev/null 2>&1; then
+      # Amankan perubahan lokal agar tidak bentrok saat pull
+      git stash >/dev/null 2>&1
+      
+      # Jalankan git pull tanpa menyembunyikan error agar jika gagal terlihat penyebabnya
+      if git pull origin "$current_branch" || git pull; then
+        git stash pop >/dev/null 2>&1 || true
         echo -e "${C_HIJAU}Update sukses! Memulai ulang script...${C_RESET}"
         sleep 1
         exec bash "$0" "$@"
       else
-        echo -e "${C_MERAH}Gagal melakukan git pull. Silakan update manual.${C_RESET}"
-        sleep 2
+        git stash pop >/dev/null 2>&1 || true
+        echo -e "${C_MERAH}Gagal melakukan git pull. Silakan periksa koneksi atau update manual.${C_RESET}"
+        sleep 3
       fi
     fi
   fi
