@@ -221,12 +221,16 @@ DISABLED_PKGS="?"
 update_pkg_stats() {
   local lists
   lists="$(run 'pm list packages; echo ===; pm list packages -d' 2>/dev/null | tr -d '\r')"
-  TOTAL_PKGS="$(echo "$lists" | sed '/===/,$d' | grep -c 'package:' || echo '?')"
-  DISABLED_PKGS="$(echo "$lists" | sed '1,/===/d' | grep -c 'package:' || echo '0')"
+  TOTAL_PKGS="$(echo "$lists" | sed '/===/,$d' | grep -c 'package:' || true)"
+  DISABLED_PKGS="$(echo "$lists" | sed '1,/===/d' | grep -c 'package:' || true)"
 }
 
 show_device_info() {
-  echo "Device : $MODEL ($DEVICE)"
+  if [ -n "$DEVICE" ]; then
+    echo "Device : $MODEL ($DEVICE)"
+  else
+    echo "Device : $MODEL"
+  fi
   echo "Series : $SERIES"
   echo "Region : ${VARIANT}${REGION:+ [$REGION]}"
   echo "Android: $ANDR"
