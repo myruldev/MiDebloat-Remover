@@ -139,7 +139,7 @@ Untuk performa maksimal, baterai awet, dan UI responsif:
 
 Dibuat dengan ❤️ oleh **myrul.dev**
 
-🌐 [www.myrul.dev](https://www.myrul.dev) · 📘 [facebook.com/myruldev](https://web.facebook.com/myruldev)
+🌐 [www.myrul.dev](https://www.myrul.dev) · 📘 [facebook](https://web.facebook.com/myruldev)
 
 ⭐ Kalau bermanfaat, kasih bintang di GitHub ya!
 
