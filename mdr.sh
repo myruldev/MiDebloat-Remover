@@ -166,19 +166,19 @@ IS_XIAOMI=0
 detect_device() {
   [ -n "$MODEL" ] && return 0
   
-  local props
-  props="$(run 'getprop ro.product.brand; echo ===; getprop ro.product.manufacturer; echo ===; getprop ro.product.model; echo ===; getprop ro.product.device; echo ===; getprop ro.miui.ui.version.name; echo ===; getprop ro.hyperos.version; echo ===; getprop ro.build.version.release; echo ===; getprop ro.miui.region; echo ===; getprop ro.product.mod_device; echo ===; getprop ro.product.locale.region' 2>/dev/null | tr -d '\r')"
+  local raw_props
+  raw_props="$(run 'echo brand=$(getprop ro.product.brand); echo manu=$(getprop ro.product.manufacturer); echo model=$(getprop ro.product.model); echo device=$(getprop ro.product.device); echo miui=$(getprop ro.miui.ui.version.name); echo hyper=$(getprop ro.hyperos.version); echo andr=$(getprop ro.build.version.release); echo region=$(getprop ro.miui.region); echo moddev=$(getprop ro.product.mod_device); echo locale=$(getprop ro.product.locale.region)' 2>/dev/null | tr -d '\r')"
 
-  BRAND="$(echo "$props" | sed -n '1p')"
-  MANU="$(echo "$props" | sed -n '3p')"
-  MODEL="$(echo "$props" | sed -n '5p')"
-  DEVICE="$(echo "$props" | sed -n '7p')"
-  MIUI="$(echo "$props" | sed -n '9p')"
-  HYPER="$(echo "$props" | sed -n '11p')"
-  ANDR="$(echo "$props" | sed -n '13p')"
-  REGION="$(echo "$props" | sed -n '15p')"
-  MODDEV="$(echo "$props" | sed -n '17p')"
-  LOCALE="$(echo "$props" | sed -n '19p')"
+  BRAND="$(echo "$raw_props" | grep "^brand=" | cut -d= -f2-)"
+  MANU="$(echo "$raw_props" | grep "^manu=" | cut -d= -f2-)"
+  MODEL="$(echo "$raw_props" | grep "^model=" | cut -d= -f2-)"
+  DEVICE="$(echo "$raw_props" | grep "^device=" | cut -d= -f2-)"
+  MIUI="$(echo "$raw_props" | grep "^miui=" | cut -d= -f2-)"
+  HYPER="$(echo "$raw_props" | grep "^hyper=" | cut -d= -f2-)"
+  ANDR="$(echo "$raw_props" | grep "^andr=" | cut -d= -f2-)"
+  REGION="$(echo "$raw_props" | grep "^region=" | cut -d= -f2-)"
+  MODDEV="$(echo "$raw_props" | grep "^moddev=" | cut -d= -f2-)"
+  LOCALE="$(echo "$raw_props" | grep "^locale=" | cut -d= -f2-)"
 
   # Series
   SERIES="Unknown"
