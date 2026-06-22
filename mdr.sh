@@ -97,7 +97,8 @@ check_update() {
   fi
 
   local_sha="$(git rev-parse HEAD 2>/dev/null)"
-  remote_sha="$(git rev-parse @{u} 2>/dev/null)"
+  current_branch="$(git symbolic-ref --short HEAD 2>/dev/null || echo "main")"
+  remote_sha="$(git rev-parse "origin/$current_branch" 2>/dev/null)"
 
   if [ -n "$local_sha" ] && [ -n "$remote_sha" ] && [ "$local_sha" != "$remote_sha" ]; then
     echo
@@ -110,7 +111,7 @@ check_update() {
     read -r -p "Update otomatis sekarang? (y/n): " confirm
     if [[ "$confirm" =~ ^[Yy]$ ]]; then
       echo "Mengunduh pembaruan..."
-      if git pull origin main >/dev/null 2>&1 || git pull >/dev/null 2>&1; then
+      if git pull origin "$current_branch" >/dev/null 2>&1 || git pull >/dev/null 2>&1; then
         echo -e "${C_HIJAU}Update sukses! Memulai ulang script...${C_RESET}"
         sleep 1
         exec bash "$0" "$@"
