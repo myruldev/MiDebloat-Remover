@@ -137,6 +137,10 @@ Untuk performa maksimal, baterai awet, dan UI responsif:
 
 <div align="center">
 
-Made with ❤️ by **myrul.dev** · 🌐 [www.myrul.dev](https://www.myrul.dev) · 📘 [Facebook](https://web.facebook.com/myruldev)
+Dibuat dengan ❤️ oleh **myrul.dev**
+
+🌐 [www.myrul.dev](https://www.myrul.dev) · 📘 [facebook.com/myruldev](https://web.facebook.com/myruldev)
+
+⭐ Kalau bermanfaat, kasih bintang di GitHub ya!
 
 </div>
