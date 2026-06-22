@@ -88,20 +88,19 @@ log() {
 
 logo() {
   echo -e "${C_BIRU}"
-  echo "  ┌────────────────────────────────────────────────┐"
-  echo "  │          ███╗   ███╗██████╗ ██████╗           │"
-  echo "  │          ████╗ ████║██╔══██╗██╔══██╗          │"
-  echo "  │          ██╔████╔██║██║  ██║██████╔╝          │"
-  echo "  │          ██║╚██╔╝██║██║  ██║██╔══██╗          │"
-  echo "  │          ██║ ╚═╝ ██║██████╔╝██║  ██║          │"
-  echo "  │          ╚═╝     ╚═╝╚═════╝ ╚═╝  ╚═╝          │"
-  echo "  ├────────────────────────────────────────────────┤"
-  echo -e "  │               ${C_HIJAU}MI Debloat Remover${C_BIRU}               │"
-  echo -e "  │     ${C_ABU}Bersihkan bloatware Xiaomi tanpa root${C_BIRU}      │"
-  echo -e "  │      ${C_ABU}------------------------------------${C_BIRU}      │"
-  echo -e "  │    ${C_ABU}Website : ${C_BIRU}www.myrul.dev${C_BIRU}                     │"
-  echo -e "  │    ${C_ABU}Facebook: ${C_BIRU}https://web.facebook.com/myruldev${C_BIRU} │"
-  echo "  └────────────────────────────────────────────────┘"
+  echo "  ┌──────────────────────────────────────────────┐"
+  echo "  │          ███╗   ███╗██████╗ ██████╗          │"
+  echo "  │         ████╗ ████║██╔══██╗██╔══██╗          │"
+  echo "  │         ██╔████╔██║██║  ██║██████╔╝          │"
+  echo "  │         ██║╚██╔╝██║██║  ██║██╔══██╗          │"
+  echo "  │         ██║ ╚═╝ ██║██████╔╝██║  ██║          │"
+  echo "  │         ╚═╝     ╚═╝╚═════╝ ╚═╝  ╚═╝          │"
+  echo -e "  │            ${C_HIJAU}MI Debloat Remover v3${C_BIRU}             │"
+  echo -e "  │    ${C_ABU}Bersihkan bloatware Xiaomi tanpa root${C_BIRU}     │"
+  echo -e "  │     ${C_ABU}------------------------------------${C_BIRU}     │"
+  echo -e "  │  ${C_ABU}Website : ${C_BIRU}www.myrul.dev${C_BIRU}                     │"
+  echo -e "  │  ${C_ABU}Facebook: ${C_BIRU}https://web.facebook.com/myruldev${C_BIRU} │"
+  echo "  └──────────────────────────────────────────────┘"
   echo -e "${C_RESET}"
 }
 
@@ -163,7 +162,6 @@ update_pkg_stats() {
 }
 
 show_device_info() {
-  detect_device
   echo "Device : $MODEL ($DEVICE)"
   echo "Series : $SERIES"
   echo "Region : ${VARIANT}${REGION:+ [$REGION]}"
@@ -639,6 +637,7 @@ loading "Cek perlengkapan"
 sleep 0.2
 
 # --- Init stats once ---
+detect_device
 update_pkg_stats
 
 # --- Main Menu ---
