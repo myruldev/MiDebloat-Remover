@@ -22,6 +22,38 @@ set -e
 
 VERSION="3.1.0"
 
+# --- Colors ---
+C_BIRU="\033[1;36m"   # cyan
+C_HIJAU="\033[1;32m"  # green
+C_KUNING="\033[1;33m" # yellow
+C_MERAH="\033[1;31m"  # red
+C_ABU="\033[0;37m"    # grey
+C_RESET="\033[0m"     # reset
+
+# --- Animation Helpers ---
+SPEED=0.006
+ketik() {
+  local teks="$1"; local d="${2:-$SPEED}"
+  local i
+  for ((i=0; i<${#teks}; i++)); do
+    printf "%s" "${teks:$i:1}"
+    sleep "$d" 2>/dev/null
+  done
+  echo
+}
+
+loading() {
+  local teks="${1:-Memuat}"
+  local spin='|/-\'
+  local n=0
+  while [ "$n" -lt 14 ]; do
+    printf "\r${C_KUNING}%s %s...${C_RESET}" "${spin:$((n%4)):1}" "$teks"
+    sleep 0.07 2>/dev/null
+    n=$((n+1))
+  done
+  printf "\r${C_HIJAU}> %s... oke${C_RESET}   \n" "$teks"
+}
+
 # --- Requirements ---
 if ! command -v rish >/dev/null 2>&1; then
   echo "[ERROR] 'rish' tidak ditemukan."
@@ -55,27 +87,22 @@ log() {
 }
 
 logo() {
-  C_BIRU="\033[1;36m"   # cyan
-  C_HIJAU="\033[1;32m"  # green
-  C_ABU="\033[0;37m"    # grey
-  C_RESET="\033[0m"     # reset
-
   echo -e "${C_BIRU}"
-  echo "  ┌────────────────────────────┐"
-  echo "  │ ███╗   ███╗██████╗ ██████╗ │"
-  echo "  │ ████╗ ████║██╔══██╗██╔══██╗ │"
-  echo "  │ ██╔████╔██║██║  ██║██████╔╝ │"
-  echo "  │ ██║╚██╔╝██║██║  ██║██╔══██╗ │"
-  echo "  │ ██║ ╚═╝ ██║██████╔╝██║  ██║ │"
-  echo "  │ ╚═╝     ╚═╝╚═════╝ ╚═╝  ╚═╝ │"
-  echo "  └────────────────────────────┘"
-  echo -e "${C_RESET}${C_HIJAU}   MI Debloat Remover${C_RESET}"
-  echo -e "${C_ABU}   Bersihkan bloatware Xiaomi tanpa root${C_RESET}"
-  echo -e "${C_ABU}   ------------------------------------${C_RESET}"
-  echo -e "${C_ABU}   Website : ${C_BIRU}www.myrul.dev${C_RESET}"
-  echo -e "${C_ABU}   Facebook: ${C_BIRU}https://web.facebook.com/myruldev${C_RESET}"
-  echo -e "${C_ABU}==============================================${C_RESET}"
-  echo
+  echo "  ┌────────────────────────────────────────────────┐"
+  echo "  │          ███╗   ███╗██████╗ ██████╗           │"
+  echo "  │          ████╗ ████║██╔══██╗██╔══██╗          │"
+  echo "  │          ██╔████╔██║██║  ██║██████╔╝          │"
+  echo "  │          ██║╚██╔╝██║██║  ██║██╔══██╗          │"
+  echo "  │          ██║ ╚═╝ ██║██████╔╝██║  ██║          │"
+  echo "  │          ╚═╝     ╚═╝╚═════╝ ╚═╝  ╚═╝          │"
+  echo "  ├────────────────────────────────────────────────┤"
+  echo -e "  │               ${C_HIJAU}MI Debloat Remover${C_BIRU}               │"
+  echo -e "  │     ${C_ABU}Bersihkan bloatware Xiaomi tanpa root${C_BIRU}      │"
+  echo -e "  │      ${C_ABU}------------------------------------${C_BIRU}      │"
+  echo -e "  │    ${C_ABU}Website : ${C_BIRU}www.myrul.dev${C_BIRU}                     │"
+  echo -e "  │    ${C_ABU}Facebook: ${C_BIRU}https://web.facebook.com/myruldev${C_BIRU} │"
+  echo "  └────────────────────────────────────────────────┘"
+  echo -e "${C_RESET}"
 }
 
 # --- Auto detect device / series / region ---
@@ -377,6 +404,7 @@ backup_before_disable() {
 disable_list() {
   detect_device
   backup_before_disable "disable" "$@"
+  loading "Memproses"
   for p in "$@"; do disable_pkg "$p"; done
   update_pkg_stats
 }
@@ -386,6 +414,7 @@ enable_list() { for p in "$@"; do enable_pkg "$p"; done; update_pkg_stats; }
 scan_status() {
   detect_device
   echo
+  loading "Ngitung aplikasi"
   echo "[INFO] Scan status paket target di perangkat ini"
   echo "Legenda: [AKTIF] terpasang & aktif  |  [OFF] sudah disable  |  [-] tidak ada"
   echo "----------------------------------------------"
@@ -600,6 +629,15 @@ restore_from_backup() {
 
 pause() { echo; read -r -p "Tekan Enter untuk lanjut..."; }
 
+# ==========================================================
+#  MULAI
+# ==========================================================
+log "START" "Aplikasi dijalankan"
+logo
+ketik "   Menyalakan MDR..." 0.02
+loading "Cek perlengkapan"
+sleep 0.2
+
 # --- Init stats once ---
 update_pkg_stats
 
@@ -608,7 +646,7 @@ while true; do
   clear
   logo
   show_device_info
-  echo "=============================================="
+  echo "===================================="
   echo " 1) Scan & Status Paket (cek dulu sebelum debloat)"
   echo " 2) Debloat AMAN (Iklan & Telemetri Utama)"
   echo " 3) Debloat AMAN + Optional (Aplikasi Bawaan)"
@@ -626,7 +664,7 @@ while true; do
   echo "15) Restore dari File Backup"
   echo "16) Lihat Log Aksi"
   echo " 0) Keluar"
-  echo "----------------------------------------------"
+  echo "------------------------------------"
   read -r -p "Pilih (0-16): " c
 
   case "$c" in
