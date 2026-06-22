@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="assets/banner.png" alt="MiDebloat-Remover" width="100%">
+
 ```
  ███╗   ███╗██████╗ ██████╗
  ████╗ ████║██╔══██╗██╔══██╗
@@ -53,7 +55,9 @@ pm enable nama.paket
 *   💾 **Backup Otomatis** — sebelum disable, daftar paket disimpan ke `backup/backup-YYYYMMDD-HHMMSS.txt`.
 *   📝 **Log Aksi** — semua aksi tercatat di `logs/actions.log` dan bisa dilihat dari menu.
 *   ✅ **Daftar Debloat Diperluas** — iklan (MSA), telemetri, Fashion Gallery/Glance, App Vault, Facebook stub, Google TV/One, Mi Cloud, Mi Share, Mi Pay, Theme Store, dsb.
-*   ✅ **Deteksi Otomatis** model perangkat & versi sistem **MIUI / HyperOS** secara real-time.
+*   ✅ **Deteksi Otomatis** model perangkat, **region/varian ROM** (China/Global/EEA/India/Indonesia), versi **MIUI / HyperOS**, serta **statistik paket** (total & jumlah yang ter-disable) secara real-time.
+*   ⚠️ **Proteksi Salah Perangkat** — peringatan + konfirmasi otomatis jika HP bukan keluarga Xiaomi/Redmi/POCO.
+*   🎯 **Restore Pilihan** — kembalikan aplikasi tertentu saja (mis. Mi Music, Mi Video) tanpa harus restore semua.
 *   🚀 **Optimasi Kecepatan Animasi** (`0.5x`) untuk UI yang terasa jauh lebih responsif.
 *   🧹 **Clean System** (menghentikan background apps & membersihkan cache sistem).
 *   🎮 **Game Mode ON / OFF** (fixed performance mode jika didukung).
@@ -106,9 +110,10 @@ pm enable nama.paket
 | 8/9 | **Ultra Battery ON/OFF** | Batasi sync & background scan. |
 | 10 | **Monitor RAM/CPU** | Pantau proses real-time via `top`. |
 | 11/12 | **Speed Up / Restore Animations** | Animasi `0.5x` ↔ `1.0x`. |
-| 13 | **Restore Debloat** | Aktifkan kembali semua paket. |
-| 14 | **Restore dari File Backup** | Pulihkan dari `backup/backup-*.txt`. |
-| 15 | **Lihat Log Aksi** | Tampilkan `logs/actions.log`. |
+| 13 | **Restore Debloat** | Aktifkan kembali SEMUA paket. |
+| 14 | **Restore PILIHAN** | Pilih aplikasi spesifik untuk dikembalikan (mis. Mi Music, Mi Video). |
+| 15 | **Restore dari File Backup** | Pulihkan dari `backup/backup-*.txt`. |
+| 16 | **Lihat Log Aksi** | Tampilkan `logs/actions.log`. |
 
 ---
 

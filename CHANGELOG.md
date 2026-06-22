@@ -7,6 +7,22 @@ and this project adheres to Semantic Versioning.
 
 ---
 
+## [3.1.0] - 2026-06-22
+### Added
+- **Banner gambar header** (`assets/banner.png`) ditampilkan di README GitHub (tema gelap + aksen Xiaomi-orange).
+- Bagian bawah logo terminal diseragamkan dengan AUD (judul hijau, label abu, value cyan, garis penutup).
+- **Deteksi region/varian ROM** (China / Global / EEA-Eropa / India / Indonesia) via `ro.product.mod_device`, `ro.miui.region`, `ro.product.locale.region`.
+- **Peringatan otomatis** bila perangkat terdeteksi BUKAN keluarga Xiaomi/Redmi/POCO, plus konfirmasi ekstra sebelum debloat.
+- **Statistik paket** di header: jumlah total paket terpasang & jumlah yang sedang di-disable (auto-refresh setelah aksi).
+- **Menu Restore PILIHAN** — pilih aplikasi spesifik untuk dikembalikan (mis. Mi Music, Mi Video, Mi Browser) dari daftar paket yang sedang disable; dukung pilih banyak (`1 3 5`) atau `all`.
+- Nama ramah (friendly name) untuk tiap paket di Scan & Restore.
+
+### Changed
+- Scan & Status dipercepat (memakai 2x fetch list daripada query per-paket).
+- Menu utama diperluas menjadi 16 opsi.
+
+---
+
 ## [3.0.0] - 2026-06-22
 ### Added
 - ASCII banner baru bergaya "ANSI Shadow" (box-drawing) bertuliskan **MDR**, seragam dengan Android Universal Debloat (AUD).
