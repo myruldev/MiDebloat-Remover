@@ -156,7 +156,7 @@ logo() {
 IS_XIAOMI=0
 init_all() {
   local raw
-  raw="$(run 'id; echo "===ID_END==="; getprop ro.product.brand; echo "==="; getprop ro.product.manufacturer; echo "==="; getprop ro.product.model; echo "==="; getprop ro.product.device; echo "==="; getprop ro.miui.ui.version.name; echo "==="; getprop ro.hyperos.version; echo "==="; getprop ro.build.version.release; echo "==="; getprop ro.miui.region; echo "==="; getprop ro.product.mod_device; echo "==="; getprop ro.product.locale.region; echo "===PROPS_END==="; pm list packages; echo "===PKGS_END==="; pm list packages -d' 2>/dev/null | tr -d '\r')"
+  raw="$(run 'id; echo ===ID_END===; getprop ro.product.brand; echo ===; getprop ro.product.manufacturer; echo ===; getprop ro.product.model; echo ===; getprop ro.product.device; echo ===; getprop ro.miui.ui.version.name; echo ===; getprop ro.hyperos.version; echo ===; getprop ro.build.version.release; echo ===; getprop ro.miui.region; echo ===; getprop ro.product.mod_device; echo ===; getprop ro.product.locale.region; echo ===PROPS_END===; pm list packages; echo ===PKGS_END===; pm list packages -d' 2>/dev/null | tr -d '\r')"
 
   if [ -z "$raw" ] || ! echo "$raw" | grep -q "===ID_END==="; then
     echo "[ERROR] Tidak bisa konek ke Shizuku (rish -c id gagal)."
