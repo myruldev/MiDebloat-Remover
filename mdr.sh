@@ -65,6 +65,15 @@ check_requirements() {
     exit 1
   fi
   export RISH_APPLICATION_ID=${RISH_APPLICATION_ID:-com.termux}
+
+  # Quick connectivity check
+  local id_out
+  id_out="$(run "id" 2>/dev/null)"
+  if [ -z "$id_out" ] || ! echo "$id_out" | grep -q "uid="; then
+    echo "[ERROR] Tidak mendapat izin Shizuku (rish -c id gagal)."
+    echo "Cek Shizuku RUNNING, izin Termux di Shizuku, dan battery/autostart."
+    exit 1
+  fi
 }
 
 # --- Paths (backup & log) ---
@@ -154,29 +163,12 @@ logo() {
 
 # --- Auto detect device / series / region ---
 IS_XIAOMI=0
-init_all() {
-  local raw
-  raw="$(run 'id; echo ===ID_END===; getprop ro.product.brand; echo ===; getprop ro.product.manufacturer; echo ===; getprop ro.product.model; echo ===; getprop ro.product.device; echo ===; getprop ro.miui.ui.version.name; echo ===; getprop ro.hyperos.version; echo ===; getprop ro.build.version.release; echo ===; getprop ro.miui.region; echo ===; getprop ro.product.mod_device; echo ===; getprop ro.product.locale.region; echo ===PROPS_END===; pm list packages; echo ===PKGS_END===; pm list packages -d' 2>/dev/null | tr -d '\r')"
-
-  if [ -z "$raw" ] || ! echo "$raw" | grep -q "===ID_END==="; then
-    echo "[ERROR] Tidak bisa konek ke Shizuku (rish -c id gagal)."
-    echo "Cek Shizuku RUNNING, izin Termux di Shizuku, dan battery/autostart."
-    exit 1
-  fi
-
-  # Split raw output into sections
-  local id_part props_part pkgs_part disabled_part
-  id_part="$(echo "$raw" | sed '/===ID_END===/,$d')"
+detect_device() {
+  [ -n "$MODEL" ] && return 0
   
-  # Check if id_part contains uid
-  if ! echo "$id_part" | grep -q "uid="; then
-    echo "[ERROR] Tidak mendapat izin Shizuku (rish -c id gagal)."
-    exit 1
-  fi
-
-  # Extract props
   local props
-  props="$(echo "$raw" | sed -n '/===ID_END===/,/===PROPS_END===/p' | sed '1d;$d')"
+  props="$(run 'getprop ro.product.brand; echo ===; getprop ro.product.manufacturer; echo ===; getprop ro.product.model; echo ===; getprop ro.product.device; echo ===; getprop ro.miui.ui.version.name; echo ===; getprop ro.hyperos.version; echo ===; getprop ro.build.version.release; echo ===; getprop ro.miui.region; echo ===; getprop ro.product.mod_device; echo ===; getprop ro.product.locale.region' 2>/dev/null | tr -d '\r')"
+
   BRAND="$(echo "$props" | sed -n '1p')"
   MANU="$(echo "$props" | sed -n '3p')"
   MODEL="$(echo "$props" | sed -n '5p')"
@@ -221,20 +213,6 @@ init_all() {
   elif [ -n "$MODDEV" ]; then
     VARIANT="Global"
   fi
-
-  # Extract package stats
-  local pkgs_list
-  pkgs_list="$(echo "$raw" | sed -n '/===PROPS_END===/,/===PKGS_END===/p' | sed '1d;$d')"
-  TOTAL_PKGS="$(echo "$pkgs_list" | grep -c 'package:' || echo '?')"
-
-  local disabled_list
-  disabled_list="$(echo "$raw" | sed -n '/===PKGS_END===/,$p' | sed '1d')"
-  DISABLED_PKGS="$(echo "$disabled_list" | grep -c 'package:' || echo '0')"
-}
-
-detect_device() {
-  [ -n "$MODEL" ] && return 0
-  init_all
 }
 
 # --- Statistik paket (total & disabled) ---
@@ -725,7 +703,8 @@ sleep 0.2
 
 # --- Init stats once ---
 check_requirements
-init_all
+detect_device
+update_pkg_stats
 
 # --- Main Menu ---
 while true; do
