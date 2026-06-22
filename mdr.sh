@@ -55,23 +55,17 @@ loading() {
 }
 
 # --- Requirements ---
-if ! command -v rish >/dev/null 2>&1; then
-  echo "[ERROR] 'rish' tidak ditemukan."
-  echo "Pastikan Shizuku RUNNING dan rish sudah terpasang di Termux."
-  exit 1
-fi
-
-# Ensure rish knows the calling app id (Termux)
-export RISH_APPLICATION_ID=${RISH_APPLICATION_ID:-com.termux}
-
+# --- Requirements check ---
 run() { rish -c "$1"; }
 
-# Quick connectivity check (non-fatal)
-if ! run "id" >/dev/null 2>&1; then
-  echo "[ERROR] Tidak bisa konek ke Shizuku (rish -c id gagal)."
-  echo "Cek Shizuku RUNNING, izin Termux di Shizuku, dan battery/autostart."
-  exit 1
-fi
+check_requirements() {
+  if ! command -v rish >/dev/null 2>&1; then
+    echo "[ERROR] 'rish' tidak ditemukan."
+    echo "Pastikan Shizuku RUNNING dan rish sudah terpasang di Termux."
+    exit 1
+  fi
+  export RISH_APPLICATION_ID=${RISH_APPLICATION_ID:-com.termux}
+}
 
 # --- Paths (backup & log) ---
 BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -84,6 +78,48 @@ log() {
   local ts
   ts="$(date '+%Y-%m-%d %H:%M:%S')"
   echo "[$ts] [$1] $2" >>"$LOG_FILE"
+}
+
+check_update() {
+  # Cek apakah folder ini git repo
+  if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    return 0
+  fi
+
+  # Cek koneksi internet ke github (timeout 2 detik)
+  if ! ping -c 1 -W 2 github.com >/dev/null 2>&1; then
+    # Jika ping gagal, coba fetch dengan timeout config
+    if ! git -c network.http.connectionTimeout=2 fetch origin >/dev/null 2>&1; then
+      return 0
+    fi
+  else
+    git fetch origin >/dev/null 2>&1 || return 0
+  fi
+
+  local_sha="$(git rev-parse HEAD 2>/dev/null)"
+  remote_sha="$(git rev-parse @{u} 2>/dev/null)"
+
+  if [ -n "$local_sha" ] && [ -n "$remote_sha" ] && [ "$local_sha" != "$remote_sha" ]; then
+    echo
+    echo -e "${C_KUNING}┌──────────────────────────────────────────────┐${C_RESET}"
+    echo -e "${C_KUNING}│         PEMBARUAN TERSEDIA DI GITHUB!        │${C_RESET}"
+    echo -e "${C_KUNING}├──────────────────────────────────────────────┤${C_RESET}"
+    echo -e "${C_KUNING}│  Ada versi baru yang tersedia untuk diunduh.  │${C_RESET}"
+    echo -e "${C_KUNING}└──────────────────────────────────────────────┘${C_RESET}"
+    echo
+    read -r -p "Update otomatis sekarang? (y/n): " confirm
+    if [[ "$confirm" =~ ^[Yy]$ ]]; then
+      echo "Mengunduh pembaruan..."
+      if git pull origin main >/dev/null 2>&1 || git pull >/dev/null 2>&1; then
+        echo -e "${C_HIJAU}Update sukses! Memulai ulang script...${C_RESET}"
+        sleep 1
+        exec bash "$0" "$@"
+      else
+        echo -e "${C_MERAH}Gagal melakukan git pull. Silakan update manual.${C_RESET}"
+        sleep 2
+      fi
+    fi
+  fi
 }
 
 logo() {
@@ -106,17 +142,39 @@ logo() {
 
 # --- Auto detect device / series / region ---
 IS_XIAOMI=0
-detect_device() {
-  BRAND="$(run 'getprop ro.product.brand' 2>/dev/null | tr -d '\r')"
-  MANU="$(run 'getprop ro.product.manufacturer' 2>/dev/null | tr -d '\r')"
-  MODEL="$(run 'getprop ro.product.model' 2>/dev/null | tr -d '\r')"
-  DEVICE="$(run 'getprop ro.product.device' 2>/dev/null | tr -d '\r')"
-  MIUI="$(run 'getprop ro.miui.ui.version.name' 2>/dev/null | tr -d '\r')"
-  HYPER="$(run 'getprop ro.hyperos.version' 2>/dev/null | tr -d '\r')"
-  ANDR="$(run 'getprop ro.build.version.release' 2>/dev/null | tr -d '\r')"
-  REGION="$(run 'getprop ro.miui.region' 2>/dev/null | tr -d '\r')"
-  MODDEV="$(run 'getprop ro.product.mod_device' 2>/dev/null | tr -d '\r')"
-  LOCALE="$(run 'getprop ro.product.locale.region' 2>/dev/null | tr -d '\r')"
+init_all() {
+  local raw
+  raw="$(run 'id; echo "===ID_END==="; getprop ro.product.brand; echo "==="; getprop ro.product.manufacturer; echo "==="; getprop ro.product.model; echo "==="; getprop ro.product.device; echo "==="; getprop ro.miui.ui.version.name; echo "==="; getprop ro.hyperos.version; echo "==="; getprop ro.build.version.release; echo "==="; getprop ro.miui.region; echo "==="; getprop ro.product.mod_device; echo "==="; getprop ro.product.locale.region; echo "===PROPS_END==="; pm list packages; echo "===PKGS_END==="; pm list packages -d' 2>/dev/null | tr -d '\r')"
+
+  if [ -z "$raw" ] || ! echo "$raw" | grep -q "===ID_END==="; then
+    echo "[ERROR] Tidak bisa konek ke Shizuku (rish -c id gagal)."
+    echo "Cek Shizuku RUNNING, izin Termux di Shizuku, dan battery/autostart."
+    exit 1
+  fi
+
+  # Split raw output into sections
+  local id_part props_part pkgs_part disabled_part
+  id_part="$(echo "$raw" | sed '/===ID_END===/,$d')"
+  
+  # Check if id_part contains uid
+  if ! echo "$id_part" | grep -q "uid="; then
+    echo "[ERROR] Tidak mendapat izin Shizuku (rish -c id gagal)."
+    exit 1
+  fi
+
+  # Extract props
+  local props
+  props="$(echo "$raw" | sed -n '/===ID_END===/,/===PROPS_END===/p' | sed '1d;$d')"
+  BRAND="$(echo "$props" | sed -n '1p')"
+  MANU="$(echo "$props" | sed -n '3p')"
+  MODEL="$(echo "$props" | sed -n '5p')"
+  DEVICE="$(echo "$props" | sed -n '7p')"
+  MIUI="$(echo "$props" | sed -n '9p')"
+  HYPER="$(echo "$props" | sed -n '11p')"
+  ANDR="$(echo "$props" | sed -n '13p')"
+  REGION="$(echo "$props" | sed -n '15p')"
+  MODDEV="$(echo "$props" | sed -n '17p')"
+  LOCALE="$(echo "$props" | sed -n '19p')"
 
   # Series
   SERIES="Unknown"
@@ -151,14 +209,30 @@ detect_device() {
   elif [ -n "$MODDEV" ]; then
     VARIANT="Global"
   fi
+
+  # Extract package stats
+  local pkgs_list
+  pkgs_list="$(echo "$raw" | sed -n '/===PROPS_END===/,/===PKGS_END===/p' | sed '1d;$d')"
+  TOTAL_PKGS="$(echo "$pkgs_list" | grep -c 'package:' || echo '?')"
+
+  local disabled_list
+  disabled_list="$(echo "$raw" | sed -n '/===PKGS_END===/,$p' | sed '1d')"
+  DISABLED_PKGS="$(echo "$disabled_list" | grep -c 'package:' || echo '0')"
+}
+
+detect_device() {
+  [ -n "$MODEL" ] && return 0
+  init_all
 }
 
 # --- Statistik paket (total & disabled) ---
 TOTAL_PKGS="?"
 DISABLED_PKGS="?"
 update_pkg_stats() {
-  TOTAL_PKGS="$(run 'pm list packages' 2>/dev/null | tr -d '\r' | grep -c 'package:' || echo '?')"
-  DISABLED_PKGS="$(run 'pm list packages -d' 2>/dev/null | tr -d '\r' | grep -c 'package:' || echo '0')"
+  local lists
+  lists="$(run 'pm list packages; echo ===; pm list packages -d' 2>/dev/null | tr -d '\r')"
+  TOTAL_PKGS="$(echo "$lists" | sed '/===/,$d' | grep -c 'package:' || echo '?')"
+  DISABLED_PKGS="$(echo "$lists" | sed '1,/===/d' | grep -c 'package:' || echo '0')"
 }
 
 show_device_info() {
@@ -632,13 +706,14 @@ pause() { echo; read -r -p "Tekan Enter untuk lanjut..."; }
 # ==========================================================
 log "START" "Aplikasi dijalankan"
 logo
+check_update "$@"
 ketik "   Menyalakan MDR..." 0.02
 loading "Cek perlengkapan"
 sleep 0.2
 
 # --- Init stats once ---
-detect_device
-update_pkg_stats
+check_requirements
+init_all
 
 # --- Main Menu ---
 while true; do
