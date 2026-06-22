@@ -61,18 +61,18 @@ logo() {
   C_RESET="\033[0m"     # reset
 
   echo -e "${C_BIRU}"
-  echo " ███╗   ███╗██████╗ ██████╗ "
-  echo " ████╗ ████║██╔══██╗██╔══██╗"
-  echo " ██╔████╔██║██║  ██║██████╔╝"
-  echo " ██║╚██╔╝██║██║  ██║██╔══██╗"
-  echo " ██║ ╚═╝ ██║██████╔╝██║  ██║"
-  echo " ╚═╝     ╚═╝╚═════╝ ╚═╝  ╚═╝"
-  echo -e "${C_RESET}${C_HIJAU}        MI DEBLOAT REMOVER${C_RESET}"
-  echo -e "${C_ABU}     Bersihkan bloatware Xiaomi tanpa root${C_RESET}"
-  echo -e "${C_ABU}     ------------------------------------${C_RESET}"
-  echo -e "${C_ABU}     Website : ${C_BIRU}www.myrul.dev${C_RESET}"
-  echo -e "${C_ABU}     Facebook: ${C_BIRU}https://web.facebook.com/myruldev${C_RESET}"
-  echo -e "${C_ABU}============================================================${C_RESET}"
+  echo "      ███╗   ███╗██████╗ ██████╗ "
+  echo "      ████╗ ████║██╔══██╗██╔══██╗"
+  echo "      ██╔████╔██║██║  ██║██████╔╝"
+  echo "      ██║╚██╔╝██║██║  ██║██╔══██╗"
+  echo "      ██║ ╚═╝ ██║██████╔╝██║  ██║"
+  echo "      ╚═╝     ╚═╝╚═════╝ ╚═╝  ╚═╝"
+  echo -e "${C_RESET}${C_HIJAU}   MI Debloat Remover${C_RESET}"
+  echo -e "${C_ABU}   Bersihkan bloatware Xiaomi tanpa root${C_RESET}"
+  echo -e "${C_ABU}   ------------------------------------${C_RESET}"
+  echo -e "${C_ABU}   Website : ${C_BIRU}www.myrul.dev${C_RESET}"
+  echo -e "${C_ABU}   Facebook: ${C_BIRU}https://web.facebook.com/myruldev${C_RESET}"
+  echo -e "${C_ABU}==============================================${C_RESET}"
   echo
 }
 
@@ -606,7 +606,7 @@ while true; do
   clear
   logo
   show_device_info
-  echo "============================================================"
+  echo "=============================================="
   echo " 1) Scan & Status Paket (cek dulu sebelum debloat)"
   echo " 2) Debloat AMAN (Iklan & Telemetri Utama)"
   echo " 3) Debloat AMAN + Optional (Aplikasi Bawaan)"
