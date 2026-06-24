@@ -4,7 +4,7 @@
 
 # MiDebloat-Remover (MDR)
 
-**Bersihkan aplikasi bawaan (bloatware) HP Xiaomi, Redmi & POCO — TANPA ROOT.**
+**Bersihkan aplikasi bawaan (bloatware) HP Xiaomi, Redmi & POCO — Tanpa Root.**
 CLI sederhana berbahasa Indonesia, jalan di **Termux + Shizuku (rish)**.
 
 [![Platform](https://img.shields.io/badge/platform-Android%20(Termux)-3DDC84?logo=android&logoColor=white)](#)
